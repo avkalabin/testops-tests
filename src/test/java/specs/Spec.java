@@ -8,12 +8,9 @@ import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.restassured.RestAssured.with;
 import static io.restassured.filter.log.LogDetail.BODY;
 import static io.restassured.filter.log.LogDetail.STATUS;
-import static tests.TestcaseTests.*;
+import static tests.TestCaseManager.*;
 
 public class Spec {
-
-
-
 
     public static RequestSpecification requestSpec = with()
             .filter(withCustomTemplates())
