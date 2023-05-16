@@ -17,7 +17,7 @@ public class TestCaseManager {
 
     final static public String PROJECT_ID = "2264",
             X_XSRF_TOKEN = "075c0ca2-b053-4926-90ad-f1f877dab709",
-            ALLURE_TESTOPS_SESSION = "4da95314-9d63-4e92-85ab-20f14749d247";
+            ALLURE_TESTOPS_SESSION = "ff995ffd-4e7d-45ae-9e23-653f6ff467de";
 
     public static CreateTestCaseResponse createTestCaseResponse;
     Integer testCaseId;

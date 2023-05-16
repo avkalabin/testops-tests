@@ -17,10 +17,10 @@ public class TestOpsTests extends TestBase {
     @Test
     void verifyCreationTestCaseTest() {
 
-        step("Авторизация", () -> cookieAuth.authWithCookie());
-
         testCaseManager.createTestCase();
         testCaseManager.addSteps();
+
+        step("Авторизация", () -> cookieAuth.authWithCookie());
 
         step("Проверка имени созданного тест-кейса", () -> {
 
@@ -34,20 +34,20 @@ public class TestOpsTests extends TestBase {
     @Test
     void editTestCaseTest() {
 
-        step("Авторизация", () -> cookieAuth.authWithCookie());
-
         testCaseManager.createTestCase();
         testCaseManager.addSteps();
+
+        step("Авторизация", () -> cookieAuth.authWithCookie());
 
         step("Редактирование имени тест-кейса", () -> {
 
             testOpsPage.verifyTestCaseName(testCaseManager.testCaseName)
                     .clickRenameTestCase()
                     .editTestCaseName();
-
         });
 
         step("Проверка имени отредактированного тест-кейса", () -> {
+
             testOpsPage.verifyTestCaseName(testCaseManager.testCaseName + " edited");
         });
 
@@ -59,10 +59,10 @@ public class TestOpsTests extends TestBase {
     @Test
     void verifyCreationStepsTest() {
 
-        step("Авторизация", () -> cookieAuth.authWithCookie());
-
         testCaseManager.createTestCase();
         testCaseManager.addSteps();
+
+        step("Авторизация", () -> cookieAuth.authWithCookie());
 
         step("Проверка создания шагов тест-кейса", () -> {
 
@@ -77,20 +77,20 @@ public class TestOpsTests extends TestBase {
     @Test
     void editStepsAttachTest() {
 
-        step("Авторизация", () -> cookieAuth.authWithCookie());
-
         testCaseManager.createTestCase();
         testCaseManager.addSteps();
+
+        step("Авторизация", () -> cookieAuth.authWithCookie());
 
         step("Добавление аттача", () -> {
 
             testOpsPage.verifyTestCaseName(testCaseManager.testCaseName)
                     .editStepsMenuClick()
                     .attachTextToStep("Attached text");
-
         });
 
         step("Проверка добавленного аттача", () -> {
+
             testOpsPage.verifyAddedAttach("Attached text");
         });
 
