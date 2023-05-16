@@ -1,38 +1,30 @@
 package tests;
 
+import helpers.CookieAuth;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.Cookie;
+import pages.TestOpsPage;
 
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byTagAndText;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static io.qameta.allure.Allure.step;
-import static java.lang.String.format;
-import static tests.TestCaseManager.*;
 
 public class TestOpsTests extends TestBase {
 
     TestCaseManager testCaseManager = new TestCaseManager();
+    TestOpsPage testOpsPage = new TestOpsPage();
+    CookieAuth cookieAuth = new CookieAuth();
 
 
     @DisplayName("Проверка имени созданного тест-кейса")
     @Test
     void verifyCreationTestCaseTest() {
+
+        step("Авторизация", () -> cookieAuth.authWithCookie());
+
         testCaseManager.createTestCase();
         testCaseManager.addSteps();
 
         step("Проверка имени созданного тест-кейса", () -> {
-            open("/favicon.ico");
 
-            Cookie authorizationCookie = new Cookie("ALLURE_TESTOPS_SESSION", ALLURE_TESTOPS_SESSION);
-            getWebDriver().manage().addCookie(authorizationCookie);
-
-            Integer testCaseId = TestCaseManager.createTestCaseResponse.getId();
-            String testCaseUrl = format("/project/%s/test-cases/%s", PROJECT_ID, testCaseId);
-            open(testCaseUrl);
-            $(".TestCaseLayout__name").shouldHave(text(testCaseManager.testCaseName));
+            testOpsPage.verifyTestCaseName(testCaseManager.testCaseName);
         });
 
         testCaseManager.deleteTestCase();
@@ -42,27 +34,21 @@ public class TestOpsTests extends TestBase {
     @Test
     void editTestCaseTest() {
 
+        step("Авторизация", () -> cookieAuth.authWithCookie());
+
         testCaseManager.createTestCase();
         testCaseManager.addSteps();
 
         step("Редактирование имени тест-кейса", () -> {
-            open("/favicon.ico");
 
-            Cookie authorizationCookie = new Cookie("ALLURE_TESTOPS_SESSION", ALLURE_TESTOPS_SESSION);
-            getWebDriver().manage().addCookie(authorizationCookie);
+            testOpsPage.verifyTestCaseName(testCaseManager.testCaseName)
+                    .clickRenameTestCase()
+                    .editTestCaseName();
 
-            Integer testCaseId = createTestCaseResponse.getId();
-            String testCaseUrl = format("/project/%s/test-cases/%s", PROJECT_ID, testCaseId);
-            open(testCaseUrl);
-            $(".TestCaseLayout__name").shouldHave(text(testCaseManager.testCaseName));
-            $(".Menu__trigger").click();
-            $("div:nth-child(1) .Menu__item > span").click();
-            $(".FormLabel input[name='name']").setValue(" edited");
-            $(".Button_size_base:nth-child(2)").click();
         });
 
         step("Проверка имени отредактированного тест-кейса", () -> {
-            $(".TestCaseLayout__name").shouldHave(text(testCaseManager.testCaseName + " edited"));
+            testOpsPage.verifyTestCaseName(testCaseManager.testCaseName + " edited");
         });
 
         testCaseManager.deleteTestCase();
@@ -73,56 +59,42 @@ public class TestOpsTests extends TestBase {
     @Test
     void verifyCreationStepsTest() {
 
+        step("Авторизация", () -> cookieAuth.authWithCookie());
+
         testCaseManager.createTestCase();
         testCaseManager.addSteps();
 
         step("Проверка создания шагов тест-кейса", () -> {
-            open("/favicon.ico");
 
-            Cookie authorizationCookie = new Cookie("ALLURE_TESTOPS_SESSION", ALLURE_TESTOPS_SESSION);
-            getWebDriver().manage().addCookie(authorizationCookie);
-
-            String testCaseUrl = format("/project/%s/test-cases/%s", PROJECT_ID, testCaseManager.testCaseId);
-            open(testCaseUrl);
-            $$(".Editable").shouldHave(sizeGreaterThanOrEqual(1));
+            testOpsPage.verifyStepsCreation();
         });
 
         testCaseManager.deleteTestCase();
 
     }
-
 
     @DisplayName("Проверка добавления аттача к шагам")
     @Test
     void editStepsAttachTest() {
 
+        step("Авторизация", () -> cookieAuth.authWithCookie());
+
         testCaseManager.createTestCase();
         testCaseManager.addSteps();
 
         step("Добавление аттача", () -> {
-            open("/favicon.ico");
 
-            Cookie authorizationCookie = new Cookie("ALLURE_TESTOPS_SESSION", ALLURE_TESTOPS_SESSION);
-            getWebDriver().manage().addCookie(authorizationCookie);
+            testOpsPage.verifyTestCaseName(testCaseManager.testCaseName)
+                    .editStepsMenuClick()
+                    .attachTextToStep("Attached text");
 
-            Integer testCaseId = createTestCaseResponse.getId();
-            String testCaseUrl = format("/project/%s/test-cases/%s", PROJECT_ID, testCaseId);
-            open(testCaseUrl);
-            $(".TestCaseLayout__name").shouldHave(text(testCaseManager.testCaseName));
-            $("[data-testid='section__scenario'] button").click();
-            $(".TestCaseScenarioStepEdit__wrapper [name = 'Step menu']").click();
-            $(byTagAndText("span", "Attach text")).click();
-            $(".FormLabel [name = 'content']").setValue("Attached text");
-            $(".Form__controls:nth-child(3) .Button_style_primary > span").click();
-            $(".Editable Button[type = 'submit']").click();
         });
 
         step("Проверка добавленного аттача", () -> {
-            $(".Scenario").shouldHave(text("Attached text"));
+            testOpsPage.verifyAddedAttach("Attached text");
         });
 
         testCaseManager.deleteTestCase();
     }
-
 
 }

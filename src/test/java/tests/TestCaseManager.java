@@ -16,10 +16,10 @@ import static specs.Spec.responseSpec;
 public class TestCaseManager {
 
     final static public String PROJECT_ID = "2264",
-            X_XSRF_TOKEN = "e0be332a-2b8a-46fd-87e5-fec6e8cad6eb",
-            ALLURE_TESTOPS_SESSION = "a68f50da-cbef-42a3-ab05-f78fd522039b";
+            X_XSRF_TOKEN = "075c0ca2-b053-4926-90ad-f1f877dab709",
+            ALLURE_TESTOPS_SESSION = "4da95314-9d63-4e92-85ab-20f14749d247";
 
-    static CreateTestCaseResponse createTestCaseResponse;
+    public static CreateTestCaseResponse createTestCaseResponse;
     Integer testCaseId;
     Faker faker = new Faker();
     String testCaseName = faker.name().fullName();
